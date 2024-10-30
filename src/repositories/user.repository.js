@@ -1,33 +1,35 @@
+// 
 import { pool } from "../db.config.js";
 
-// User 데이터 삽입
+// 사용자 데이터 삽입
 export const addUser = async (data) => {
   const conn = await pool.getConnection();
 
   try {
-    const [confirm] = await pool.query(
-      `SELECT EXISTS(SELECT 1 FROM user WHERE email = ?) as isExistEmail;`,
-      data.email
+    const [confirm] = await conn.query(
+      `SELECT EXISTS(SELECT 1 FROM member WHERE email = ?) as isExistEmail;`,
+      [data.email]
     );
 
     if (confirm[0].isExistEmail) {
-      return null;
+      return null; // 이미 존재하는 이메일
     }
 
-    const [result] = await pool.query(
-      `INSERT INTO user (email, name, gender, birth, address, detail_address, phone_number) VALUES (?, ?, ?, ?, ?, ?, ?);`,
+    const [result] = await conn.query(
+      `INSERT INTO member (name, gender, age, address, spec_address, status, created_at, updated_at, email, point, phone_num) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW(), ?, 0, ?);`,
       [
-        data.email,
         data.name,
         data.gender,
-        data.birth,
+        data.age, // age가 추가됨
         data.address,
         data.detailAddress,
+        "active", // 기본 상태
+        data.email,
         data.phoneNumber,
       ]
     );
 
-    return result.insertId;
+    return result.insertId; // 추가된 사용자 ID 반환
   } catch (err) {
     throw new Error(
       `오류가 발생했어요. 요청 파라미터를 확인해주세요. (${err})`
@@ -42,15 +44,13 @@ export const getUser = async (userId) => {
   const conn = await pool.getConnection();
 
   try {
-    const [user] = await pool.query(`SELECT * FROM user WHERE user_id = ?;`, userId);
+    const [user] = await conn.query(`SELECT * FROM member WHERE id = ?;`, [userId]);
 
-    console.log(user);
-
-    if (user.length == 0) {
-      return null;
+    if (user.length === 0) {
+      return null; // 사용자 없음
     }
 
-    return user;
+    return user[0]; // 사용자 정보를 반환
   } catch (err) {
     throw new Error(
       `오류가 발생했어요. 요청 파라미터를 확인해주세요. (${err})`
@@ -60,17 +60,15 @@ export const getUser = async (userId) => {
   }
 };
 
-// 음식 선호 카테고리 매핑
-export const setPreference = async (userId, foodCategoryId) => {
+// 사용자 선호 카테고리 추가
+export const setPreference = async (userId, categoryId) => {
   const conn = await pool.getConnection();
 
   try {
-    await pool.query(
-      `INSERT INTO user_favor_category (user_id, food_category_id) VALUES (?, ?);`,
-      [userId, foodCategoryId]
+    await conn.query(
+      `INSERT INTO member_prefer (member_id, category_id, created_at, updated_at) VALUES (?, ?, NOW(), NOW());`,
+      [userId, categoryId]
     );
-
-    return;
   } catch (err) {
     throw new Error(
       `오류가 발생했어요. 요청 파라미터를 확인해주세요. (${err})`
@@ -85,11 +83,9 @@ export const getUserPreferencesByUserId = async (userId) => {
   const conn = await pool.getConnection();
 
   try {
-    const [preferences] = await pool.query(
-      "SELECT ufc.id, ufc.food_category_id, ufc.user_id, fcl.name " +
-        "FROM user_favor_category ufc JOIN food_category fcl on ufc.food_category_id = fcl.id " +
-        "WHERE ufc.user_id = ? ORDER BY ufc.food_category_id ASC;",
-      userId
+    const [preferences] = await conn.query(
+      `SELECT * FROM member_prefer WHERE member_id = ?;`,
+      [userId]
     );
 
     return preferences;
