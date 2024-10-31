@@ -15,3 +15,17 @@ export const responseFromMission = (body) => {
     missionSpec: body.missionSpec,
   };
 };
+
+export const bodyToMissionChallenge = (body) => {
+  return {
+    memberId: body.memberId || "",
+    missionId: body.missionId || "",
+  };
+};
+
+export const responseFromMissionChallenge = (challengeId) => {
+  return {
+    message: "미션에 도전하였습니다.",
+    challengeId,
+  };
+};
