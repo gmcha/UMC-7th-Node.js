@@ -1,6 +1,5 @@
-// review.service.js
-import { addReview, checkStoreExists } from "../repositories/review.repository.js";
 import { responseFromReview } from "../dtos/review.dto.js";
+import { addReview, checkStoreExists } from "../repositories/review.repository.js";
 
 export const submitReview = async (data) => {
   const storeExists = await checkStoreExists(data.storeId);
