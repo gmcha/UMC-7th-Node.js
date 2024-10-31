@@ -1,4 +1,3 @@
-// review.repository.js
 import { pool } from "../db.config.js";
 
 export const addReview = async (data) => {
