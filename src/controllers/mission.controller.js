@@ -4,12 +4,11 @@ import { addMission } from "../services/mission.service.js";
 import { challengeMission } from "../services/missionChallenge.service.js";
 
 export const handleAddMission = async (req, res, next) => {
-  try {
-    const mission = await addMission(bodyToMission(req.body));
-    res.status(StatusCodes.CREATED).json({ result: mission });
-  } catch (error) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
-  }
+    const missionData = bodyToMission(req.body);
+    console.log("body:", req.body); // 값이 잘 들어오나 확인하기 위한 테스트용
+    
+    const mission = await addMission(missionData);
+    res.status(StatusCodes.OK).json({ result: mission });
 };
 
 export const handleChallengeMission = async (req, res, next) => {
