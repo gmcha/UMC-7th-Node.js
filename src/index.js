@@ -27,3 +27,5 @@ app.post("/users/missions/challenge", handleChallengeMission);
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
+
+console.log(process.env.DATABASE_URL);
