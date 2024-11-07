@@ -1,37 +1,39 @@
-import { pool } from "../db.config.js";
+import { prisma } from "../db.config.js";
 
 // 미션 도전 추가
 export const addMissionChallenge = async ({ memberId, missionId }) => {
-  const conn = await pool.getConnection();
-
   try {
-    const [result] = await conn.query(
-      `INSERT INTO member_mission (member_id, mission_id, status, created_at, updated_at) VALUES (?, ?, '진행중', NOW(), NOW());`,
-      [memberId, missionId]
-    );
+    // Prisma를 사용하여 member_mission 테이블에 데이터 삽입
+    const newChallenge = await prisma.memberMission.create({
+      data: {
+        memberId: memberId,
+        missionId: missionId,
+        status: '진행중',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    });
 
-    return result.insertId; 
+    return newChallenge.id; // 추가된 미션 도전 ID 반환
   } catch (err) {
     throw new Error(`오류가 발생했습니다. (${err})`);
-  } finally {
-    conn.release();
   }
 };
 
 // 도전 중인 미션 체크
 export const checkMissionInProgress = async (memberId, missionId) => {
-  const conn = await pool.getConnection();
-
   try {
-    const [rows] = await conn.query(
-      `SELECT COUNT(*) as count FROM member_mission WHERE member_id = ? AND mission_id = ? AND status = '진행중';`,
-      [memberId, missionId]
-    );
+    // Prisma를 사용하여 member_mission 테이블에서 도전 중인 미션 여부 확인
+    const missionCount = await prisma.memberMission.count({
+      where: {
+        memberId: memberId,
+        missionId: missionId,
+        status: '진행중',
+      },
+    });
 
-    return rows[0].count > 0; 
+    return missionCount > 0; // 진행 중인 미션이 있으면 true, 없으면 false
   } catch (err) {
     throw new Error(`오류가 발생했습니다. (${err})`);
-  } finally {
-    conn.release();
   }
 };
