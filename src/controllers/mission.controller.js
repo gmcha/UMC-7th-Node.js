@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import { bodyToMission, bodyToMissionChallenge } from "../dtos/mission.dto.js";
-import { addMission, listStoreMissions } from "../services/mission.service.js";
+import { addMission, listStoreMissions, listUserMissions } from "../services/mission.service.js";
 import { challengeMission } from "../services/missionChallenge.service.js";
 
 export const handleAddMission = async (req, res, next) => {
@@ -22,6 +22,14 @@ export const handleChallengeMission = async (req, res, next) => {
 export const handleListStoreMissions = async (req, res, next) => {
   const reviews = await listStoreMissions(
     parseInt(req.params.storeId),
+    typeof req.query.cursor === "string" ? parseInt(req.query.cursor) : 0
+  );
+  res.status(StatusCodes.OK).json(reviews);
+};
+
+export const handleListUserMissions = async (req, res, next) => {
+  const reviews = await listUserMissions(
+    parseInt(req.params.userId),
     typeof req.query.cursor === "string" ? parseInt(req.query.cursor) : 0
   );
   res.status(StatusCodes.OK).json(reviews);
