@@ -50,26 +50,10 @@ model MemberPrefer {
   @@map("member_prefer")
 }
 
-model Region {
-  id        Int     @id @default(autoincrement())
-  name      String     @db.VarChar(20)
-  createdAt DateTime   @default(now()) @db.DateTime(6)
-  updatedAt DateTime   @updatedAt @db.DateTime(6)
-
-  stores    Store[]
-
-  @@map("region")
-}
-
 model Store {
   id          Int     @id @default(autoincrement())
-  region      Region     @relation(fields: [regionId], references: [id])
-  regionId    Int     @map("region_id")
   name        String     @db.VarChar(50)
   address     String     @db.VarChar(50)
-  score       Float
-  createdAt   DateTime   @default(now()) @db.DateTime(6)
-  updatedAt   DateTime   @updatedAt @db.DateTime(6)
 
   missions    Mission[]
   reviews     Review[]
@@ -127,7 +111,6 @@ model Review {
   storeId     Int     @map("store_id")
   body        String     @db.Text
   score       Float
-  createdAt   DateTime   @default(now()) @db.DateTime(6)
 
   reviewImages ReviewImage[]
 
