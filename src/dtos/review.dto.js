@@ -10,8 +10,8 @@ export const bodyToReview = (body) => {
 export const responseFromReview = (review) => {
   return {
     id: review.id,
-    memberId: review.member_id,
-    storeId: review.store_id,
+    memberId: review.memberId,
+    storeId: review.storeId,
     body: review.body,
     score: review.score,
   };
