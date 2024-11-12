@@ -9,7 +9,7 @@ export const bodyToMission = (body) => {
 
 export const responseFromMission = (body) => {
   return {
-    storeId: body.storeId ,
+    storeId: body.storeId,
     reward: body.reward,
     deadline: body.deadline,
     missionSpec: body.missionSpec,
@@ -23,9 +23,18 @@ export const bodyToMissionChallenge = (body) => {
   };
 };
 
-export const responseFromMissionChallenge = (challengeId) => {
+export const responseFromMissionChallenge = (challenge) => {
   return {
-    message: "미션에 도전하였습니다.",
-    challengeId,
+    missionId: challenge.missionId,
+    status: challenge.status,
+  };
+};
+
+export const responseFromMissionList = (missions) => {
+  return {
+    data: missions,
+    pagination: {
+      cursor: missions.length ? missions[missions.length - 1].id : null,
+    },
   };
 };

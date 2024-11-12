@@ -37,7 +37,6 @@ export const setPreference = async (userId, foodCategoryId) => {
   }
 };
 
-
 // 사용자 선호 카테고리 반환
 export const getUserPreferencesByUserId = async (userId) => {
   const preferences = await prisma.MemberPrefer.findMany({
@@ -55,28 +54,20 @@ export const getUserPreferencesByUserId = async (userId) => {
 };
 
 export const getAllUserReviews = async (userId, cursor = 0) => {
-  console.log("UserId:", userId);  // userId 확인
   const reviews = await prisma.review.findMany({
     select: {
       id: true,
       body: true,
       score: true,
-      createdAt: true,
-      store: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
+      storeId: true,
+      memberId: true,
+      store: true,
+      member: true,
     },
-    where: {
-      memberId: userId,
-      id: { gt: cursor > 0 ? cursor : 0 },  // cursor가 0일 경우 첫 번째 리뷰부터
-    },    
+    where: { memberId: userId, id: { gt: cursor }},
     orderBy: { id: "asc" },
-    take: 5,
+    take: 2,
   });
 
-  console.log("Reviews:", reviews);  // 리뷰 확인
   return reviews;
 };

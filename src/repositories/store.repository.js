@@ -1,18 +1,19 @@
 import { prisma } from "../db.config.js";
 
 export const getAllStoreReviews = async (storeId, cursor = 0) => {
-  const reviews = await prisma.userStoreReview.findMany({
+  const reviews = await prisma.review.findMany({
     select: {
       id: true,
-      content: true,
+      score: true,
+      body: true,
       storeId: true,
-      userId: true,
+      memberId: true,
       store: true,
-      user: true,
+      member: true,
     },
     where: { storeId: storeId, id: { gt: cursor } },
     orderBy: { id: "asc" },
-    take: 5,
+    take: 2,
   });
 
   return reviews;

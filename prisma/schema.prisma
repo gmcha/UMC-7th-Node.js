@@ -14,12 +14,11 @@ datasource db {
 }
 
 model Member {
-  id             BigInt    @id @default(autoincrement())
+  id             Int    @id @default(autoincrement())
   email          String    @db.VarChar(50)
   name           String    @db.VarChar(20)
   gender         String    @db.VarChar(10)
   address        String    @db.VarChar(40)
-  specAddress    String    @db.VarChar(40)
   phoneNum       String    @db.VarChar(13)
 
   memberPrefernces MemberPrefer[]
@@ -31,9 +30,8 @@ model Member {
 }
 
 model FoodCategory {
-  id          BigInt     @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   name        String     @db.VarChar(15)
-  column4     String     @db.VarChar(15)
 
   memberPrefer MemberPrefer[]
 
@@ -41,39 +39,21 @@ model FoodCategory {
 }
 
 model MemberPrefer {
-  id          BigInt     @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   member      Member     @relation(fields: [memberId], references: [id])
-  memberId    BigInt     @map("member_id")
+  memberId    Int     @map("member_id")
   category    FoodCategory @relation(fields: [categoryId], references: [id])
-  categoryId  BigInt     @map("category_id")
-  createdAt   DateTime   @default(now()) @db.DateTime(6)
-  updatedAt   DateTime   @updatedAt @db.DateTime(6)
+  categoryId  Int     @map("category_id")
 
   @@index([categoryId], map: "category_id")
   @@index([memberId], map: "member_id")
   @@map("member_prefer")
 }
 
-model Region {
-  id        BigInt     @id @default(autoincrement())
-  name      String     @db.VarChar(20)
-  createdAt DateTime   @default(now()) @db.DateTime(6)
-  updatedAt DateTime   @updatedAt @db.DateTime(6)
-
-  stores    Store[]
-
-  @@map("region")
-}
-
 model Store {
-  id          BigInt     @id @default(autoincrement())
-  region      Region     @relation(fields: [regionId], references: [id])
-  regionId    BigInt     @map("region_id")
+  id          Int     @id @default(autoincrement())
   name        String     @db.VarChar(50)
   address     String     @db.VarChar(50)
-  score       Float
-  createdAt   DateTime   @default(now()) @db.DateTime(6)
-  updatedAt   DateTime   @updatedAt @db.DateTime(6)
 
   missions    Mission[]
   reviews     Review[]
@@ -83,7 +63,7 @@ model Store {
 }
 
 model Terms {
-  id          BigInt     @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   title       String     @db.VarChar(20)
   body        String     @db.Text
   optional    Boolean
@@ -96,9 +76,9 @@ model Terms {
 }
 
 model Mission {
-  id          BigInt     @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   store       Store      @relation(fields: [storeId], references: [id])
-  storeId     BigInt     @map("store_id")
+  storeId     Int     @map("store_id")
   reward      Int
   deadline    DateTime
   missionSpec String     @db.Text
@@ -111,11 +91,11 @@ model Mission {
 }
 
 model MemberMission {
-  id          BigInt     @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   member      Member     @relation(fields: [memberId], references: [id])
-  memberId    BigInt     @map("member_id")
+  memberId    Int     @map("member_id")
   mission     Mission    @relation(fields: [missionId], references: [id])
-  missionId   BigInt     @map("mission_id")
+  missionId   Int     @map("mission_id")
   status      String     @db.VarChar(15)
   createdAt   DateTime   @default(now()) @db.DateTime(6)
   updatedAt   DateTime   @updatedAt @db.DateTime(6)
@@ -124,14 +104,13 @@ model MemberMission {
 }
 
 model Review {
-  id          BigInt     @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   member      Member     @relation(fields: [memberId], references: [id])
-  memberId    BigInt     @map("member_id")
+  memberId    Int     @map("member_id")
   store       Store      @relation(fields: [storeId], references: [id])
-  storeId     BigInt     @map("store_id")
+  storeId     Int     @map("store_id")
   body        String     @db.Text
   score       Float
-  createdAt   DateTime   @default(now()) @db.DateTime(6)
 
   reviewImages ReviewImage[]
 
@@ -139,11 +118,11 @@ model Review {
 }
 
 model ReviewImage {
-  id          BigInt     @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   review      Review     @relation(fields: [reviewId], references: [id])
-  reviewId    BigInt     @map("review_id")
+  reviewId    Int     @map("review_id")
   store       Store      @relation(fields: [storeId], references: [id])
-  storeId     BigInt     @map("store_id")
+  storeId     Int     @map("store_id")
   imageUrl    String     @db.Text
   createdAt   DateTime   @default(now()) @db.DateTime(6)
   updatedAt   DateTime   @updatedAt @db.DateTime(6)
@@ -152,11 +131,11 @@ model ReviewImage {
 }
 
 model MemberAgree {
-  id          BigInt     @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   member      Member     @relation(fields: [memberId], references: [id])
-  memberId    BigInt     @map("member_id")
+  memberId    Int     @map("member_id")
   terms       Terms      @relation(fields: [termsId], references: [id])
-  termsId     BigInt     @map("terms_id")
+  termsId     Int     @map("terms_id")
   createdAt   DateTime   @default(now()) @db.DateTime(6)
   updatedAt   DateTime   @updatedAt @db.DateTime(6)
 
