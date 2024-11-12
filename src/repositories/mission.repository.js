@@ -19,3 +19,21 @@ export const addMissionToStore = async (data) => {
     throw new Error(`오류가 발생했어요. 요청 파라미터를 확인해주세요. (${err.message})`);
   }
 };
+
+export const getAllStoreMissions = async (storeId, cursor = 0) => {
+  const missions = await prisma.mission.findMany({
+    select: {
+      id: true,
+      reward: true,
+      deadline: true,
+      storeId: true,
+      store: true,
+      missionSpec: true,
+    },
+    where: { storeId: storeId, id: { gt: cursor } },
+    orderBy: { id: "asc" },
+    take: 3,
+  });
+
+  return missions;
+};
