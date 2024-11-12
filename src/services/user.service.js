@@ -4,17 +4,18 @@ import {
   getUser,
   getUserPreferencesByUserId,
   setPreference,
+  getAllUserReviews,
 } from "../repositories/user.repository.js";
+import { responseFromReviews } from '../dtos/store.dto.js';
 
 export const userSignUp = async (data) => {
   const joinUserId = await addUser({
     email: data.email,
     name: data.name,
     gender: data.gender,
-    birth: data.birth,
     address: data.address,
-    detailAddress: data.detailAddress,
-    phoneNumber: data.phoneNumber,
+    specAddress: data.detailAddress,
+    phoneNum: data.phoneNumber,
   });
 
   if (joinUserId === null) {
@@ -29,4 +30,9 @@ export const userSignUp = async (data) => {
   const preferences = await getUserPreferencesByUserId(joinUserId);
 
   return responseFromUser({ user, preferences });
+};
+
+export const listUserReviews = async (userId, cursor) => {
+  const reviews = await getAllUserReviews(userId, cursor);
+  return responseFromReviews(reviews);
 };

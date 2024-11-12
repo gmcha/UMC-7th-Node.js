@@ -3,12 +3,12 @@ import { prisma } from "../db.config.js";
 // 리뷰 추가
 export const addReview = async (data) => {
   try {
-    const review = await prisma.userStoreReview.create({
+    const review = await prisma.Review.create({
       data: {
         storeId: data.storeId,
         userId: data.memberId,
-        content: data.body,
-        // 다른 필드들도 추가할 수 있습니다.
+        body: data.body,
+        score: data.score,
       },
     });
 
