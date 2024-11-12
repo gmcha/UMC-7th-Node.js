@@ -8,7 +8,7 @@ export const handleAddMission = async (req, res, next) => {
   console.log("body:", req.body); // 값이 잘 들어오나 확인하기 위한 테스트용
     
   const mission = await addMission(bodyToMission(req.body));
-  res.status(StatusCodes.OK).json({ result: mission });
+  res.status(StatusCodes.OK).success( mission );
 };
 
 export const handleChallengeMission = async (req, res, next) => {
@@ -16,7 +16,7 @@ export const handleChallengeMission = async (req, res, next) => {
   console.log("body:", req.body); // 값이 잘 들어오나 확인하기 위한 테스트용
   
   const result = await challengeMission(bodyToMissionChallenge(req.body));
-  res.status(StatusCodes.OK).json({ result });
+  res.status(StatusCodes.OK).success( result );
 };
 
 export const handleListStoreMissions = async (req, res, next) => {
@@ -24,7 +24,7 @@ export const handleListStoreMissions = async (req, res, next) => {
     parseInt(req.params.storeId),
     typeof req.query.cursor === "string" ? parseInt(req.query.cursor) : 0
   );
-  res.status(StatusCodes.OK).json(reviews);
+  res.status(StatusCodes.OK).success(reviews);
 };
 
 export const handleListUserMissions = async (req, res, next) => {
@@ -32,5 +32,5 @@ export const handleListUserMissions = async (req, res, next) => {
     parseInt(req.params.userId),
     typeof req.query.cursor === "string" ? parseInt(req.query.cursor) : 0
   );
-  res.status(StatusCodes.OK).json(reviews);
+  res.status(StatusCodes.OK).success(reviews);
 };
