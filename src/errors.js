@@ -17,3 +17,13 @@ export class NonExistingStoreError extends Error {
     this.data = data;
   }
 }
+
+export class MissionAlreadyInProgress extends Error {
+  erorrCode = "MM001";
+
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.data = data;
+  }
+}
