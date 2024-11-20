@@ -5,7 +5,7 @@ export const handleListStoreReviews = async (req, res, next) => {
   /*
     #swagger.summary = '가게 리뷰 목록 조회 API';
     #swagger.responses[200] = {
-      description: "상점 리뷰 목록 조회 성공 응답",
+      description: "가게 리뷰 목록 조회 성공 응답",
       content: {
         "application/json": {
           schema: {
@@ -27,8 +27,7 @@ export const handleListStoreReviews = async (req, res, next) => {
                         storeId: { type: "number" },
                         memberId: { type: "number" },
                         store: { type: "object", properties: { id: { type: "number" }, name: { type: "string" } } },
-                        user: { type: "object", properties: { id: { type: "number" }, email: { type: "string" }, name: { type: "string" } } },
-                        content: { type: "string" }
+                        member: { type: "object", properties: { id: { type: "number" }, email: { type: "string" }, name: { type: "string" } } },
                       }
                     }
                   },
@@ -41,7 +40,7 @@ export const handleListStoreReviews = async (req, res, next) => {
       }
     };
     #swagger.responses[400] = {
-      description: "상점 리뷰 목록 조회 실패 응답",
+      description: "가게 리뷰 목록 조회 실패 응답",
       content: {
         "application/json": {
           schema: {
