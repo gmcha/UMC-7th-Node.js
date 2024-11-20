@@ -15,6 +15,12 @@ export const addMission = async (data) => {
 };
 
 export const listStoreMissions = async (storeId, cursor) => {
+  const storeExists = await checkStoreExists(storeId);
+
+  if (!storeExists) {
+    throw new NonExistingStoreError("존재하지 않는 가게입니다.");
+  }
+
   const missions = await getAllStoreMissions(storeId, cursor);
   return responseFromMissionList(missions);
 };
