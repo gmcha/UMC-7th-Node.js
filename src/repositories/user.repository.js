@@ -71,3 +71,13 @@ export const getAllUserReviews = async (userId, cursor = 0) => {
 
   return reviews;
 };
+
+export const checkMemberExists = async (userId) => {
+  const member = await prisma.member.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+
+  return member !== null;  // store가 존재하면 true 반환
+};

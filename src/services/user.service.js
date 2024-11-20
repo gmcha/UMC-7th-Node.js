@@ -1,11 +1,12 @@
 import { responseFromUser } from "../dtos/user.dto.js";
-import { DuplicateUserEmailError } from "../errors.js";
+import { DuplicateUserEmailError, NonExistingMemberError } from "../errors.js";
 import {
   addUser,
   getUser,
   getUserPreferencesByUserId,
   setPreference,
   getAllUserReviews,
+  checkMemberExists
 } from "../repositories/user.repository.js";
 import { responseFromReviews } from '../dtos/store.dto.js';
 
@@ -33,6 +34,12 @@ export const userSignUp = async (data) => {
 };
 
 export const listUserReviews = async (userId, cursor) => {
+  const memberExists = await checkMemberExists(userId);
+
+  if (!memberExists) {
+    throw new NonExistingMemberError("존재하지 않는 사용자입니다.");
+}
+
   const reviews = await getAllUserReviews(userId, cursor);
   return responseFromReviews(reviews);
 };
