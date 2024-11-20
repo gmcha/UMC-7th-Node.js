@@ -69,6 +69,7 @@ app.get("/openapi.json", async (req, res, next) => {
 });
 
 app.get("/", (req, res) => {
+  // #swagger.ignore = true
   res.send("Hello World!");
 });
 
