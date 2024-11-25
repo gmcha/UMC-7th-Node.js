@@ -12,6 +12,13 @@ import { handleUserSignUp, handleListUserReviews } from "./controllers/user.cont
 import { handleAddReview } from "./controllers/review.controller.js";
 import { handleAddMission, handleChallengeMission, handleListStoreMissions, handleListUserMissions } from "./controllers/mission.controller.js";
 import { handleListStoreReviews } from "./controllers/store.controller.js";
+import fetch from 'node-fetch';
+
+var client_id = "yXmx4Vz4wjMGCi0G2kV6";
+var client_secret="wEKq2K942W";
+var state = "RAMDOM_STATE";
+var redirectURI = encodeURI("http://localhost:3000/oauth2/callback/naver");
+var api_url = "";
 
 dotenv.config();
 
@@ -90,6 +97,25 @@ app.get(
   }),
   (req, res) => res.redirect("/")
 );
+
+app.get("/oauth2/login/naver", function (req, res) {
+  api_url = 'https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=' + client_id + '&redirect_uri=' + redirectURI + '&state=' + state;
+  res.writeHead(200, {'Content-Type': 'text/html;charset=utf-8'});
+  res.end("<a href='"+ api_url + "'><img height='50' src='http://static.nid.naver.com/oauth/small_g_in.PNG'/></a>");
+});
+app.get('/oauth2/callback/naver', async function (req, res) {
+  const code = req.query.code;
+  const state = req.query.state;
+  api_url = 'https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id='
+   + client_id + '&client_secret=' + client_secret + '&redirect_uri=' + redirectURI + '&code=' + code + '&state=' + state;
+  const response = await fetch(api_url, {
+    headers: {'X-Naver-Client-Id':client_id, 'X-Naver-Client-Secret': client_secret}
+  });
+  const tokenRequest = await response.json();
+
+  return res.send(tokenRequest);
+});
+
 
 app.get("/openapi.json", async (req, res, next) => {
   // #swagger.ignore = true
