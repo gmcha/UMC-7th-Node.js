@@ -6,7 +6,8 @@ import {
   getUserPreferencesByUserId,
   setPreference,
   getAllUserReviews,
-  checkMemberExists
+  checkMemberExists, 
+  updateMemberInfo
 } from "../repositories/user.repository.js";
 import { responseFromReviews } from '../dtos/store.dto.js';
 
@@ -42,4 +43,17 @@ export const listUserReviews = async (userId, cursor) => {
 
   const reviews = await getAllUserReviews(userId, cursor);
   return responseFromReviews(reviews);
+};
+
+export const updateUser = async (userId, updateData) => {
+  // 아래 유효성 검사 추후에 수정하기 (로직 다른 곳으로 배치, 에러 통일)
+  if (!updateData || Object.keys(updateData).length === 0) {
+    return res.error({
+      errorCode: "invalid_request",
+      reason: "No data provided for update.",
+    });
+  }
+
+  const updatedMember = await updateMemberInfo(userId, updateData);
+  return updatedMember;  // 추가 구현할 것: DTO
 };

@@ -8,7 +8,7 @@ import session from "express-session";
 import passport from "passport";
 import { googleStrategy } from "./auth.config.js";
 import { prisma } from "./db.config.js";
-import { handleUserSignUp, handleListUserReviews } from "./controllers/user.controller.js";
+import { handleUserSignUp, handleListUserReviews, handleUpdateUser } from "./controllers/user.controller.js";
 import { handleAddReview } from "./controllers/review.controller.js";
 import { handleAddMission, handleChallengeMission, handleListStoreMissions, handleListUserMissions } from "./controllers/mission.controller.js";
 import { handleListStoreReviews } from "./controllers/store.controller.js";
@@ -146,6 +146,7 @@ app.get("/api/v1/stores/:storeId/reviews", handleListStoreReviews);
 app.get("/api/v1/users/:userId/reviews", handleListUserReviews);
 app.get("/api/v1/stores/:storeId/missions", handleListStoreMissions);
 app.get("/api/v1/users/:userId/missions", handleListUserMissions);
+app.patch("/api/v1/users/:userId", handleUpdateUser);
 
 /**
  * 전역 오류를 처리하기 위한 미들웨어

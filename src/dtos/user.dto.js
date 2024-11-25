@@ -22,3 +22,11 @@ export const responseFromUser = ({ user, preferences }) => {
     preferCategory: preferFoods,
   };
 };
+
+export const userInfoFromUser = (body) => {
+  return {
+    gender: body.gender,
+    address: body.address,
+    phoneNum: body.phoneNum,
+  }
+}
