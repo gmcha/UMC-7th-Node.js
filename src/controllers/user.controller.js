@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
-import { bodyToUser } from "../dtos/user.dto.js";
-import { userSignUp, listUserReviews } from "../services/user.service.js";
+import { bodyToUser, userInfoFromUser } from "../dtos/user.dto.js";
+import { userSignUp, listUserReviews, updateUser } from "../services/user.service.js";
 
 export const handleUserSignUp = async (req, res, next) => {
   /*
@@ -143,4 +143,14 @@ export const handleListUserReviews = async (req, res, next) => {
     typeof req.query.cursor === "string" ? parseInt(req.query.cursor) : 0
   ); 
   res.status(StatusCodes.OK).success(reviews);
+};
+
+export const handleUpdateUser = async (req, res, next) => {
+  // 추가 구현할 것: Swagger
+
+  const updates = await updateUser(
+    parseInt(req.params.userId),
+    userInfoFromUser(req.body)
+  ); 
+  res.status(StatusCodes.OK).success(updates);
 };

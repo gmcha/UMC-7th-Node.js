@@ -81,3 +81,16 @@ export const checkMemberExists = async (userId) => {
 
   return member !== null;  // store가 존재하면 true 반환
 };
+
+export const updateMemberInfo = async (userId, updateData) => {
+  const updatedUser = await prisma.member.update({
+    where: { id: userId },
+    data: {
+      gender: updateData.gender,
+      address: updateData.address,
+      phoneNum: updateData.phoneNum,
+    },
+  });
+
+  return updatedUser;
+};
